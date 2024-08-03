@@ -1,2 +1,5 @@
+.idea/
 build/
+cmake-build-debug/
+src/PySide6_QtAds.egg-info/
 *.whl
