@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-import inspect
+import argparse
+import logging
 import os
 import sys
 from pathlib import Path
@@ -9,49 +10,93 @@ import cmake_build_extension
 import setuptools
 from wheel.bdist_wheel import bdist_wheel
 
-import PySide6
-import shiboken6
 
-
-if os.getenv('PYSIDE6_QTADS_NO_HARD_PYSIDE_REQUIREMENT'):
+if os.environ.get('PYSIDE6_QTADS_NO_HARD_PYSIDE_REQUIREMENT') == '1':
     install_requirements = [
         'PySide6-Essentials', 'shiboken6'
     ]
 else:
+    version = os.environ.get('PYSIDE_VERSION')
     install_requirements = [
-        f'PySide6-Essentials=={PySide6.__version__}',
-        f'shiboken6=={shiboken6.__version__}'
+        f'PySide6=={version}',
+        f'PySide6_Addons=={version}',
+        f'PySide6_Essentials=={version}',
+        f'shiboken6=={version}'
     ]
 
 
-class bdist_wheel_abi3(bdist_wheel):
+class qtads_bdist_wheel(bdist_wheel):
     def get_tag(self):
         python, abi, plat = super().get_tag()
 
         if python.startswith("cp"):
-            # on CPython, our wheels are abi3 and compatible back to 3.8
-            return "cp38", "abi3", plat
+            # on CPython, our wheels are abi3 and compatible back to 3.11+
+            return "cp311", "abi3", plat
 
         return python, abi, plat
 
+    def run_command(self, command: str):
+        super().run_command(command)
+        if command == 'install':
+            try:
+                self._generate_pyi_support()
+            except Exception as error:
+                print(f'generate_pyi_support -> ERROR -> {error}')
+
+    @classmethod
+    def _generate_pyi_support(cls) -> None:
+        options = argparse.Namespace(modules=['PySide6QtAds'])
+
+        logging.basicConfig(level=logging.INFO)
+        logger = logging.getLogger("generate_pyi")
+        outpath = './build/lib.win-amd64-cpython-311'
+        if outpath and not Path(outpath).exists():
+            os.makedirs(outpath)
+            logger.info(f"+++ Created path {outpath}")
+        options._pyside_call = True
+        options.logger = logger
+
+        # now we can import
+        global PySide6, inspect, typing, HintingEnumerator, build_brace_pattern
+        import PySide6
+        import PySide6QtAds
+        from PySide6.support.signature.lib.enum_sig import HintingEnumerator
+        from PySide6.support.signature.lib.tool import build_brace_pattern
+        from PySide6.support.signature.lib.pyi_generator import generate_pyi
+
+        # propagate USE_PEP563 to the mapping module.
+        # Perhaps this can be automated?
+        PySide6.support.signature.mapping.USE_PEP563 = sys.version_info[:2] >= (3, 7)
+
+        outpath = Path(outpath) if outpath and os.fspath(outpath) else Path(PySide6QtAds.__file__).parent
+        for mod_name in options.modules:
+            import_name = mod_name
+            if hasattr(sys, "pypy_version_info"):
+                # PYSIDE-535: We cannot use __feature__ yet in PyPy
+                generate_pyi(import_name, outpath, options)
+            else:
+                from PySide6.support import feature
+                feature_id = feature.get_select_id(options.feature)
+                with feature.force_selection(feature_id, import_name):
+                    generate_pyi(import_name, outpath, options)
 
 
 class CustomCMakeExtension(cmake_build_extension.CMakeExtension):
     """XXX: Override CMakeExtension to support extra kwargs"""
     def __init__(
-        self,
-        name: str,
-        install_prefix: str = "",
-        disable_editable: bool = False,
-        write_top_level_init: str = None,
-        cmake_configure_options: List[str] = (),
-        source_dir: str = str(Path(".").absolute()),
-        cmake_build_type: str = "Release",
-        cmake_component: str = None,
-        cmake_depends_on: List[str] = (),
-        expose_binaries: List[str] = (),
-        cmake_generator: str = "Ninja",
-        **kwargs
+            self,
+            name: str,
+            install_prefix: str = "",
+            disable_editable: bool = False,
+            write_top_level_init: str = None,
+            cmake_configure_options: List[str] = (),
+            source_dir: str = str(Path(".").absolute()),
+            cmake_build_type: str = "Release",
+            cmake_component: str = None,
+            cmake_depends_on: List[str] = (),
+            expose_binaries: List[str] = (),
+            cmake_generator: str = "Ninja",
+            **kwargs
     ):
         setuptools.Extension.__init__(self, name=name, sources=[], **kwargs)
 
@@ -75,7 +120,6 @@ class CustomCMakeExtension(cmake_build_extension.CMakeExtension):
 
 init_py = Path("init.py").read_text()
 
-
 setuptools.setup(
     ext_modules=[
         CustomCMakeExtension(
@@ -84,18 +128,18 @@ setuptools.setup(
             write_top_level_init=init_py,
             source_dir=str(Path(__file__).parent.absolute()),
             cmake_configure_options=[
+                '-DCMAKE_C_FLAGS=-v',
                 "-DBUILD_EXAMPLES:BOOL=OFF",
                 "-DBUILD_STATIC:BOOL=ON",
                 "-DADS_VERSION=4.3.0",
-                f"-DPython3_ROOT_DIR={Path(sys.prefix)}",
-                f"-DPython_EXECUTABLE={Path(sys.executable)}"
+                f"-DPython3_ROOT_DIR={Path(sys.prefix)}"
             ],
             py_limited_api=True
         ),
     ],
     cmdclass=dict(
         build_ext=cmake_build_extension.BuildExtension,
-        bdist_wheel=bdist_wheel_abi3
+        bdist_wheel=qtads_bdist_wheel
     ),
     install_requires=install_requirements,
 )
