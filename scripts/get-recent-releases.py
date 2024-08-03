@@ -2,6 +2,7 @@
 import requests
 import argparse
 
+
 def main():
 	ap = argparse.ArgumentParser()
 	ap.add_argument('num', type=int)

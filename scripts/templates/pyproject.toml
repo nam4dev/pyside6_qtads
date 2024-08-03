@@ -1,0 +1,13 @@
+[build-system]
+requires = [
+    "wheel",
+    "setuptools>=45",
+    "setuptools_scm[toml]>=6.0",
+    "cmake_build_extension",
+    "PySide6==%(pyside6_version)s",
+    "PySide6_Addons==%(pyside6_version)s",
+    "PySide6_Essentials==%(pyside6_version)s",
+    "shiboken6==%(pyside6_version)s",
+    "shiboken6_generator==%(pyside6_version)s"
+]
+build-backend = "setuptools.build_meta"
