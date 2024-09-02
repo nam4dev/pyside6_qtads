@@ -16,11 +16,11 @@ You may also build from source. Example build from source on Ubuntu 22.04:
 ```bash
 # Install Qt (for example, using aqtinstall)
 pip install aqtinstall
-aqt install-qt linux desktop 6.6.0 --outputdir qt
+aqt install-qt linux desktop 6.7.1 --outputdir qt
 
 # Build PySide6-QtAds
-LD_LIBRARY_PATH=$PWD/qt/6.6.0/gcc_64/lib \
-CMAKE_PREFIX_PATH=$PWD/qt/6.6.0/gcc_64/lib/cmake/ \
+LD_LIBRARY_PATH=$PWD/qt/6.7.1/gcc_64/lib \
+CMAKE_PREFIX_PATH=$PWD/qt/6.7.1/gcc_64/lib/cmake/ \
 PIP_EXTRA_INDEX_URL=https://download.qt.io/official_releases/QtForPython/ \
 pip install -v .
 
@@ -29,7 +29,7 @@ python setup.py bdist_wheel build_ext -D"CMAKE_PREFIX_PATH:PATH=%USERPROFILE%/de
 
 ```
 
-Note: `shiboken6-generator` is required when building from source, and currently only available via Qt's package index.
+Note: `shiboken6-generator` is required when building from source. It will be downloaded automatically in the command above from Qt's package index, as it is not available on PyPI.
 
 # Examples
 https://github.com/mborgerson/Qt-Advanced-Docking-System/tree/pyside6

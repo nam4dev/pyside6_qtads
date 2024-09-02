@@ -7,7 +7,7 @@ jobs:
       rel0: ${{ steps.query.outputs.rel0 }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
       - name: Query PyPI for recent PySide release number
@@ -21,7 +21,7 @@ jobs:
           python -m pip install --user build
           python -m build --sdist
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: source
           path: dist/*.tar.gz
@@ -36,23 +36,23 @@ jobs:
         include:
           - os: windows-latest
             pyside_ver: ${{ needs.build_src.outputs.rel0 }}
-            wheel: cp38-win_amd64
+            wheel: cp310-win_amd64
             arch: x86_64
           - os: ubuntu-latest
             pyside_ver: ${{ needs.build_src.outputs.rel0 }}
-            wheel: cp38-manylinux_x86_64
+            wheel: cp310-manylinux_x86_64
             arch: x86_64
-          - os: macos-latest
+          - os: macos-13
             pyside_ver: ${{ needs.build_src.outputs.rel0 }}
             wheel: cp310-macosx_x86_64
             arch: x86_64
-          - os: macos-latest
+          - os: macos-13
             pyside_ver: ${{ needs.build_src.outputs.rel0 }}
             wheel: cp310-macosx_arm64
             arch: arm64
     steps:
       - name: Download sdist
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: source
       - name: Unpack sdist
@@ -82,7 +82,7 @@ jobs:
       - uses: ilammy/msvc-dev-cmd@v1
         if: runner.os == 'Windows'
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.16.2
+        uses: pypa/cibuildwheel@v2.17.0
         with:
           output-dir: wheelhouse
         env:
@@ -102,7 +102,8 @@ jobs:
             PIP_EXTRA_INDEX_URL=https://download.qt.io/official_releases/QtForPython/
             VERBOSE=1
           CIBW_BEFORE_BUILD_LINUX: >
-            dnf install -y mesa-libGL libxslt llvm clang-libs
+            rpm --import https://repo.almalinux.org/almalinux/RPM-GPG-KEY-AlmaLinux
+            && dnf install -y mesa-libGL libxslt llvm clang-libs
             && python3 -m pip install --user aqtinstall auditwheel
             && python3 -m aqt install-qt linux desktop ${{ env.QT_VERSION }} --outputdir ${{ env.QT_BASE_DIR }} --base http://mirrors.ocf.berkeley.edu/qt/
             && python3 ./scripts/set-qt-constraint.py ${{ matrix.pyside_ver }}
@@ -132,9 +133,9 @@ jobs:
       #     done
       #     popd
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: wheels
+          name: wheel-${{ matrix.wheel }}
           path: ./wheelhouse/*.whl
 
   upload_pypi:
@@ -143,14 +144,15 @@ jobs:
     # upload to PyPI on every tag starting with 'v'
     if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v')
     steps:
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: source
           path: dist
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
-          name: wheels
+          pattern: wheel-*
           path: dist
+          merge-multiple: true
       - uses: pypa/gh-action-pypi-publish@release/v1
         with:
           user: __token__

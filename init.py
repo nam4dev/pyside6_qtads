@@ -16,6 +16,7 @@ else:
 	from .PySide6QtAds import ads
 
 
+# eTabIndex
 TabInvalidIndex = ads.eTabIndex.TabInvalidIndex
 TabDefaultInsertIndex = ads.eTabIndex.TabDefaultInsertIndex
 
@@ -31,6 +32,13 @@ InvalidDockWidgetArea = ads.InvalidDockWidgetArea
 OuterDockAreas = ads.OuterDockAreas
 AllDockAreas = ads.AllDockAreas
 
+# SideBarLocation
+SideBarLeft = ads.SideBarLeft
+SideBarTop = ads.SideBarTop
+SideBarBottom = ads.SideBarBottom
+SideBarRight = ads.SideBarRight
+SideBarNone = ads.SideBarNone
+
 # eBitwiseOperator
 BitwiseAnd = ads.BitwiseAnd
 BitwiseOr = ads.BitwiseOr
@@ -43,15 +51,19 @@ DraggingFloatingWidget = ads.DraggingFloatingWidget
 
 # eIcon
 TabCloseIcon = ads.TabCloseIcon
+AutoHideIcon = ads.AutoHideIcon
 DockAreaMenuIcon = ads.DockAreaMenuIcon
 DockAreaUndockIcon = ads.DockAreaUndockIcon
 DockAreaCloseIcon = ads.DockAreaCloseIcon
+DockAreaMinimizeIcon = ads.DockAreaMinimizeIcon
 IconCount = ads.IconCount
 
 # TitleBarButton
 TitleBarButtonTabsMenu = ads.TitleBarButtonTabsMenu
 TitleBarButtonUndock = ads.TitleBarButtonUndock
 TitleBarButtonClose = ads.TitleBarButtonClose
+TitleBarButtonAutoHide = ads.TitleBarButtonAutoHide
+TitleBarButtonMinimize = ads.TitleBarButtonMinimize
 
 # Classes
 CDockAreaTabBar = ads.CDockAreaTabBar

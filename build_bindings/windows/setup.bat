@@ -1,9 +1,9 @@
 @echo off
 
-cd %USERPROFILE%\dev\pyside6_qtads\build_bindings || exit
+cd %USERPROFILE%\dev\src\pyside6_qtads\build_bindings || exit
 CALL .\windows\setup-vars.bat
 
-CALL %USERPROFILE%\dev\venv\pyside6_qtads\Scripts\activate
+CALL %USERPROFILE%\dev\virtualenv\pyside6_qtads\Scripts\activate
 python --version
 
 python -m pip install --upgrade pip
@@ -11,7 +11,7 @@ python -m pip install --upgrade pip
 python -m pip install -U aqtinstall auditwheel %TRUSTED_HOSTS%
 python -m aqt install-qt windows desktop %QT_VERSION% win64_%QT_TARGET% --outputdir %QT_BASE_DIR%
 
-cd %USERPROFILE%\dev\pyside6_qtads || exit
+cd %USERPROFILE%\dev\src\pyside6_qtads || exit
 
 python .\scripts\build_cpp_environment.py %QT_BASE_DIR% %PYSIDE_VERSION% %QT_TARGET% %PYSIDE6_QTADS_VERSION%
 
