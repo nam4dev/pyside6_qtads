@@ -23,6 +23,10 @@ LD_LIBRARY_PATH=$PWD/qt/6.6.0/gcc_64/lib \
 CMAKE_PREFIX_PATH=$PWD/qt/6.6.0/gcc_64/lib/cmake/ \
 PIP_EXTRA_INDEX_URL=https://download.qt.io/official_releases/QtForPython/ \
 pip install -v .
+
+pip wheel --global-option="build_ext" --global-options="-DCMAKE_PREFIX_PATH:PATH=%USERPROFILE%\dev\Qt\6.6.1"
+python setup.py bdist_wheel build_ext -D"CMAKE_PREFIX_PATH:PATH=%USERPROFILE%/dev/Qt/6.6.1"
+
 ```
 
 Note: `shiboken6-generator` is required when building from source, and currently only available via Qt's package index.

@@ -1,66 +1,84 @@
 import platform
+# Auto generated file
 
 if platform.system() == 'Windows':
-	import os, PySide6, shiboken6
-	with os.add_dll_directory(os.path.dirname(PySide6.__file__)), \
-	     os.add_dll_directory(os.path.dirname(shiboken6.__file__)):
-		from .PySide6QtAds import ads as _ads
+	import os
+	import PySide6
+	import shiboken6
+
+	def load_dll(path):
+		return os.add_dll_directory(os.path.dirname(path))
+
+	with load_dll(PySide6.__file__), load_dll(shiboken6.__file__):
+		from .PySide6QtAds import ads
 else:
 	# Runtime library dependencies resolved via rpath
-	from .PySide6QtAds import ads as _ads
+	from .PySide6QtAds import ads
+
+
+TabInvalidIndex = ads.eTabIndex.TabInvalidIndex
+TabDefaultInsertIndex = ads.eTabIndex.TabDefaultInsertIndex
 
 # DockWidgetArea
-DockWidgetArea = _ads.DockWidgetArea
-NoDockWidgetArea = _ads.NoDockWidgetArea
-LeftDockWidgetArea = _ads.LeftDockWidgetArea
-RightDockWidgetArea = _ads.RightDockWidgetArea
-TopDockWidgetArea = _ads.TopDockWidgetArea
-BottomDockWidgetArea = _ads.BottomDockWidgetArea
-CenterDockWidgetArea = _ads.CenterDockWidgetArea
-InvalidDockWidgetArea = _ads.InvalidDockWidgetArea
-OuterDockAreas = _ads.OuterDockAreas
-AllDockAreas = _ads.AllDockAreas
+DockWidgetArea = ads.DockWidgetArea
+NoDockWidgetArea = ads.NoDockWidgetArea
+LeftDockWidgetArea = ads.LeftDockWidgetArea
+RightDockWidgetArea = ads.RightDockWidgetArea
+TopDockWidgetArea = ads.TopDockWidgetArea
+BottomDockWidgetArea = ads.BottomDockWidgetArea
+CenterDockWidgetArea = ads.CenterDockWidgetArea
+InvalidDockWidgetArea = ads.InvalidDockWidgetArea
+OuterDockAreas = ads.OuterDockAreas
+AllDockAreas = ads.AllDockAreas
 
 # eBitwiseOperator
-BitwiseAnd = _ads.BitwiseAnd
-BitwiseOr = _ads.BitwiseOr
+BitwiseAnd = ads.BitwiseAnd
+BitwiseOr = ads.BitwiseOr
 
 # eDragState
-DraggingInactive = _ads.DraggingInactive
-DraggingMousePressed = _ads.DraggingMousePressed
-DraggingTab = _ads.DraggingTab
-DraggingFloatingWidget = _ads.DraggingFloatingWidget
+DraggingInactive = ads.DraggingInactive
+DraggingMousePressed = ads.DraggingMousePressed
+DraggingTab = ads.DraggingTab
+DraggingFloatingWidget = ads.DraggingFloatingWidget
 
 # eIcon
-TabCloseIcon = _ads.TabCloseIcon
-DockAreaMenuIcon = _ads.DockAreaMenuIcon
-DockAreaUndockIcon = _ads.DockAreaUndockIcon
-DockAreaCloseIcon = _ads.DockAreaCloseIcon
-IconCount = _ads.IconCount
+TabCloseIcon = ads.TabCloseIcon
+DockAreaMenuIcon = ads.DockAreaMenuIcon
+DockAreaUndockIcon = ads.DockAreaUndockIcon
+DockAreaCloseIcon = ads.DockAreaCloseIcon
+IconCount = ads.IconCount
 
 # TitleBarButton
-TitleBarButtonTabsMenu = _ads.TitleBarButtonTabsMenu
-TitleBarButtonUndock = _ads.TitleBarButtonUndock
-TitleBarButtonClose = _ads.TitleBarButtonClose
+TitleBarButtonTabsMenu = ads.TitleBarButtonTabsMenu
+TitleBarButtonUndock = ads.TitleBarButtonUndock
+TitleBarButtonClose = ads.TitleBarButtonClose
 
 # Classes
-CDockAreaTabBar = _ads.CDockAreaTabBar
-CDockAreaTitleBar = _ads.CDockAreaTitleBar
-CDockAreaWidget = _ads.CDockAreaWidget
-CDockComponentsFactory = _ads.CDockComponentsFactory
-CDockContainerWidget = _ads.CDockContainerWidget
-CDockFocusController = _ads.CDockFocusController
-CDockManager = _ads.CDockManager
-CDockSplitter = _ads.CDockSplitter
-CDockOverlay = _ads.CDockOverlay
-CDockOverlayCross = _ads.CDockOverlayCross
-CDockWidget = _ads.CDockWidget
-CDockWidgetTab = _ads.CDockWidgetTab
-CDockingStateReader = _ads.CDockingStateReader
-CElidingLabel = _ads.CElidingLabel
-CFloatingDockContainer = _ads.CFloatingDockContainer
-CFloatingDragPreview = _ads.CFloatingDragPreview
-IFloatingWidget = _ads.IFloatingWidget
-CIconProvider = _ads.CIconProvider
-CSpacerWidget = _ads.CSpacerWidget
-CTitleBarButton = _ads.CTitleBarButton
+CDockAreaTabBar = ads.CDockAreaTabBar
+CDockAreaTitleBar = ads.CDockAreaTitleBar
+CDockAreaWidget = ads.CDockAreaWidget
+CDockComponentsFactory = ads.CDockComponentsFactory
+CDockContainerWidget = ads.CDockContainerWidget
+CDockFocusController = ads.CDockFocusController
+CDockManager = ads.CDockManager
+CDockSplitter = ads.CDockSplitter
+CDockOverlay = ads.CDockOverlay
+CDockOverlayCross = ads.CDockOverlayCross
+CDockWidget = ads.CDockWidget
+CDockWidgetTab = ads.CDockWidgetTab
+CDockingStateReader = ads.CDockingStateReader
+CElidingLabel = ads.CElidingLabel
+CFloatingDockContainer = ads.CFloatingDockContainer
+CFloatingDragPreview = ads.CFloatingDragPreview
+IFloatingWidget = ads.IFloatingWidget
+CIconProvider = ads.CIconProvider
+CSpacerWidget = ads.CSpacerWidget
+CTitleBarButton = ads.CTitleBarButton
+
+# Auto-hide related
+CAutoHideTab = ads.CAutoHideTab
+CAutoHideSideBar = ads.CAutoHideSideBar
+CAutoHideDockContainer = ads.CAutoHideDockContainer
+
+# SideBarLocation
+SideBarLocation = ads.SideBarLocation

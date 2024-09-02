@@ -32,12 +32,12 @@
                     <parent index="this" action="add"/>
                 </modify-argument>
             </modify-function>
-           <modify-function signature="insertTab(int, ads::CDockWidgetTab*)">
+            <modify-function signature="insertTab(int, ads::CDockWidgetTab*)">
                 <modify-argument index="2">
                     <parent index="this" action="add"/>
                 </modify-argument>
             </modify-function>
-           <modify-function signature="removeTab(ads::CDockWidgetTab*)">
+            <modify-function signature="removeTab(ads::CDockWidgetTab*)">
                 <modify-argument index="1">
                     <parent index="this" action="remove"/>
                 </modify-argument>
@@ -50,7 +50,7 @@
                     <parent index="this" action="add"/>
                 </modify-argument>
             </modify-function>
-           <modify-function signature="insertWidget(int, QWidget *)">
+            <modify-function signature="insertWidget(int, QWidget *)">
                 <modify-argument index="2">
                     <parent index="this" action="add"/>
                 </modify-argument>
@@ -91,40 +91,25 @@
         </object-type>
 
         <object-type name="CDockComponentsFactory">
-            <modify-function signature="createDockWidgetTab(ads::CDockWidget*) const">
-                <modify-argument index="1">
-                    <parent index="this" action="add"/>
-                </modify-argument>
-            </modify-function>
-            <modify-function signature="createDockWidgetSideTab(ads::CDockWidget*) const">
-                <modify-argument index="1">
-                    <parent index="this" action="add"/>
-                </modify-argument>
-            </modify-function>
-            <modify-function signature="createDockAreaTabBar(ads::CDockAreaWidget*) const">
-                <modify-argument index="1">
-                    <parent index="this" action="add"/>
-                </modify-argument>
-            </modify-function>
-            <modify-function signature="createDockAreaTitleBar(ads::CDockAreaWidget*) const">
-                <modify-argument index="1">
-                    <parent index="this" action="add"/>
-                </modify-argument>
-            </modify-function>
-            <modify-function signature="setFactory(ads::CDockComponentsFactory*)">
-                <modify-argument index="1">
+            <modify-function signature="createDockWidgetTab(ads::CDockWidget*)">
+                <modify-argument index="0">
                     <define-ownership owner="c++"/>
                 </modify-argument>
-                <inject-code>
-                    //this function is static we need keep ref to default value, to be able to call python virtual functions
-                    static PyObject* _defaultValue = 0;
-                    %CPPSELF.%FUNCTION_NAME(%1);
-                    Py_INCREF(%PYARG_1);
-                    if (_defaultValue)
-                        Py_DECREF(_defaultValue);
-
-                    _defaultValue = %PYARG_1;
-                </inject-code>
+            </modify-function>
+            <modify-function signature="createDockWidgetSideTab(ads::CDockWidget*)">
+                <modify-argument index="0">
+                    <define-ownership owner="c++"/>
+                </modify-argument>
+            </modify-function>
+            <modify-function signature="createDockAreaTabBar(ads::CDockAreaWidget*)">
+                <modify-argument index="0">
+                    <define-ownership owner="c++"/>
+                </modify-argument>
+            </modify-function>
+            <modify-function signature="createDockAreaTitleBar(ads::CDockAreaWidget*)">
+                <modify-argument index="0">
+                    <define-ownership owner="c++"/>
+                </modify-argument>
             </modify-function>
         </object-type>
 
@@ -187,7 +172,7 @@
             </modify-function>
         </object-type>
 
-        <object-type name="CDockFocusController">            
+        <object-type name="CDockFocusController">
             <modify-function signature="CDockFocusController(ads::CDockManager*)">
                 <modify-argument index="1">
                     <parent index="this" action="add"/>
@@ -196,9 +181,9 @@
         </object-type>
 
         <object-type name="CDockManager">
-            <enum-type name="eAutoHideFlag" />
             <enum-type name="eViewMenuInsertionOrder" />
             <enum-type name="eConfigFlag" flags="ConfigFlags" />
+            <enum-type name="eAutoHideFlag" flags="AutoHideFlags" />
 
             <modify-function signature="registerFloatingWidget(ads::CFloatingDockContainer*)">
                 <modify-argument index="1">
@@ -221,6 +206,11 @@
                 </modify-argument>
             </modify-function>
             <modify-function signature="CDockManager(QWidget*)">
+                <modify-argument index="1">
+                    <parent index="this" action="add"/>
+                </modify-argument>
+            </modify-function>
+            <modify-function signature="setFactory(ads::CDockComponentsFactory*)">
                 <modify-argument index="1">
                     <parent index="this" action="add"/>
                 </modify-argument>
@@ -307,6 +297,7 @@
             <enum-type name="eInsertMode" />
             <enum-type name="eMinimumSizeHintMode" />
             <enum-type name="eToggleViewActionMode" />
+            <enum-type name="eToolBarStyleSource" />
 
             <modify-function signature="setDockManager(ads::CDockManager*)">
                 <modify-argument index="1">
@@ -411,7 +402,7 @@
                 </modify-argument>
             </modify-function>
         </object-type>
-        
+
         <object-type name="CAutoHideDockContainer">
             <modify-function signature="addDockWidget(ads::CDockWidget*)">
                 <modify-argument index="1">
@@ -419,9 +410,9 @@
                 </modify-argument>
             </modify-function>
         </object-type>
-        
+
         <object-type name="CAutoHideTab" />
-        
+
         <object-type name="CAutoHideSideBar">
             <modify-function signature="insertDockWidget(int, ads::CDockWidget*)">
                 <modify-argument index="2">
@@ -439,13 +430,13 @@
                 </modify-argument>
             </modify-function>
         </object-type>
-        
+
         <object-type name="CPushButton">
             <enum-type name="Orientation" />
         </object-type>
-        
+
         <object-type name="CResizeHandle" />
-        
+
         <object-type name="CDockOverlayCross">
             <enum-type name="eIconColor"/>
         </object-type>

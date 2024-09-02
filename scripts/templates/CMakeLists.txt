@@ -21,9 +21,9 @@ message(STATUS "Using python: ${Python3_EXECUTABLE}")
 # https://bugreports.qt.io/browse/QTBUG-89754
 set(OpenGL_GL_PREFERENCE "LEGACY")
 
-set(CMAKE_PREFIX_PATH "%USERPROFILE%/dev/Qt/6.7.2/msvc2019_64")
-set(QT_DIR "%USERPROFILE%/dev/Qt/6.7.2/msvc2019_64/lib/cmake/Qt6")
-set(Qt6_DIR "%USERPROFILE%/dev/Qt/6.7.2/msvc2019_64/lib/cmake/Qt6")
+set(CMAKE_PREFIX_PATH "%(cmake_prefix_path)s")
+set(QT_DIR "%(cmake_prefix_path)s/lib/cmake/Qt6")
+set(Qt6_DIR "%(cmake_prefix_path)s/lib/cmake/Qt6")
 
 # Find the required Qt packages
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets)

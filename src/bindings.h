@@ -19,6 +19,7 @@
 #include <ElidingLabel.h>
 #include <FloatingDockContainer.h>
 #include <FloatingDragPreview.h>
+#include <linux/FloatingWidgetTitleBar.h>
 #include <PushButton.h>
 #include <ResizeHandle.h>
 #include <IconProvider.h>
